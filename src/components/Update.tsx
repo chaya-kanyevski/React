@@ -1,6 +1,7 @@
-import { useContext, useRef, useState } from "react";
+import { FormEvent, useContext, useRef, useState } from "react";
 import { UserContext } from "./Home";
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
+// import axios from "axios";
 
 
 const style = {
@@ -24,22 +25,34 @@ export const Update = () =>{
     const phoneRef = useRef<HTMLInputElement>(null)
     const context = useContext(UserContext);
 
-    const handleSubmit = () => {
+    const handleSubmit = async(e : FormEvent) => {
 
+        e.preventDefault()
         setClicked(false);
 
-        if (context) {
-            context.userDispatch({
-                type: 'UPDATE', data: {
-
-                    lastName: lastNameRef.current?.value || '',
-                    email: emailRef.current?.value || '',
-                    addres: addressRef.current?.value || '',
-                    phone: phoneRef.current?.value || ''
-                }
-            })
-        }
-
+        // try {
+            if (context) {
+                context.userDispatch({
+                    type: 'UPDATE', data: {
+                        lastName: lastNameRef.current?.value || '',
+                        email: emailRef.current?.value || '',
+                        address: addressRef.current?.value || '',
+                        phone: phoneRef.current?.value || ''
+                    }
+                })
+            }
+        //     const res = await axios.put('http://localhost:3000/api/user', {
+        //         firstName: context?.user.firstName,
+        //         lastName: context?.user.lastName,
+        //         email: context?.user.email,
+        //         address: context?.user.address,
+        //         phone: context?.user.phone
+        //   })
+        //  } catch (e) {
+        //     if (axios.isAxiosError(e) && e.response?.status === 401)
+        //         alert('נתונים לא תקינים!');
+        //       console.log(e);;
+        // }
 
     }
     return(

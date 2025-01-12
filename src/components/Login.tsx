@@ -1,7 +1,8 @@
-import { useContext, useRef, useState } from "react"
+import { FormEvent, useContext, useRef, useState } from "react"
 import { Box, Button, Modal, TextField, Typography } from "@mui/material"
 import SendIcon from '@mui/icons-material/Send';
 import { UserContext } from "./Home";
+import axios, { AxiosError } from "axios";
 
 const style = {
     position: 'absolute',
@@ -23,17 +24,29 @@ const Login = ({ onLoginSuccess }: { onLoginSuccess: Function }) =>{
     const passwordRef = useRef<HTMLInputElement>(null)
     const [clicked, setClicked] = useState(false)
     const context = useContext(UserContext);
+    const [user, setUser] = useState({})
 
-    const handleSubmit = () =>{
-        if (context) {
-            setClicked(false)
-            if (context.user.firstName === nameRef.current?.value && context.user.password == passwordRef.current?.value) {
-              context.userDispatch({ type: 'CREATE', data: { firstName: nameRef.current?.value || '', password: passwordRef.current?.value || '' } })
-              onLoginSuccess()
-            }
-          }
+    const handleSubmit = async (e: FormEvent) =>{
+      e.preventDefault();
+      try{
+        const res = await axios.post('http://localhost:3000/api/user/login', {
+          firstName: nameRef.current?.value,
+          password: passwordRef.current?.value
+        })
+        console.log(res);
+        setUser(res.data.user)
+        onLoginSuccess();
+        context?.userDispatch({ type: 'CREATE', data: { firstName: nameRef.current?.value || '', password: passwordRef.current?.value || '' } })
+        setClicked(false);
+      }catch (e) {
+        if (axios.isAxiosError(e) && e.response?.status === 401)
+          alert('מייל או סיסמא לא תקינים');
+        console.log(e);
+        setClicked(false);
+      }
     }
 
+    
     return (
         <>
          <Button onClick={() => setClicked(true)} variant="outlined" sx={{ backgroundColor: 'white', color: ' #40E0D0 ', border: '1px solid gray' }}>Login</Button>
@@ -66,7 +79,6 @@ const Login = ({ onLoginSuccess }: { onLoginSuccess: Function }) =>{
             </Box>
          </Modal>
         }
-        </>
-    )
+        </>)
 }
 export default Login

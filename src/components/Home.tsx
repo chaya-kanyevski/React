@@ -1,9 +1,10 @@
 import { createContext, useReducer, useState } from "react";
 import { User, userReducer } from "./User";
 import Login from "./Login";
-import { Grid2 as Grid } from "@mui/material"
+import { Grid2 as Grid } from "@mui/material";
 import UserName from "./UserName+Avatar";
 import { Update } from "./Update";
+import Sign from "./Sign";
 
 
 export type UserContextType = {
@@ -15,10 +16,10 @@ export const UserContext = createContext<UserContextType | null>(null)
 
 const Home = () =>{
   const initialUser: User = {
-    firstName: 'chaya',
+    firstName: '',
     lastName: '',
     email: '',
-    password: '1234',
+    password: '',
     address: '',
     phone: ''
   }
@@ -37,31 +38,30 @@ const Home = () =>{
         top: 5,
         left: 5
       }}>
+
       <UserContext.Provider value={{ user, userDispatch }}>
 
-      {loginSuccess === false && <Login onLoginSuccess={handleLoginSuccess}></Login>}
-
-      {loginSuccess && <UserName></UserName>}
-
-      {loginSuccess && <Update></Update>}
+          {!loginSuccess ? ( 
+          <>
+            <Login onLoginSuccess={handleLoginSuccess} />
+            <Sign onLoginSuccess={handleLoginSuccess}/>
+            </>)
+          : 
+          ( 
+            <>
+              <UserName />
+              <Update/>
+            </>
+          )}
 
       </UserContext.Provider>
 
-      {/* <br />
-      {user.firstName}
-      <br />
-      {user.lastName}
-      <br />
-      {user.email}
-      <br />
-      {user.password}
-      <br />
-      {user.address}
-      <br />
-      {user.phone} */}
              </Grid>
 
         </Grid> 
+    {user.firstName}
+    {user.lastName}
+    {user.email}
       </>
     )
 }
