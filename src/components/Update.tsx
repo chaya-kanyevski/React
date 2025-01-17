@@ -1,7 +1,7 @@
 import { FormEvent, useContext, useRef, useState } from "react";
 import { UserContext } from "./Home";
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
-// import axios from "axios";
+import axios from "axios";
 
 
 const style = {
@@ -19,6 +19,7 @@ const style = {
 
 export const Update = () =>{
     const [clicked, setClicked] = useState(false)
+    const firstNameRef = useRef<HTMLInputElement>(null)    
     const lastNameRef = useRef<HTMLInputElement>(null)
     const emailRef = useRef<HTMLInputElement>(null)
     const addressRef = useRef<HTMLInputElement>(null)
@@ -29,30 +30,39 @@ export const Update = () =>{
 
         e.preventDefault()
         setClicked(false);
+        console.log('User ID:', context?.user.id);
+        console.log('First Name:', firstNameRef.current?.value);
+        console.log('Last Name:', lastNameRef.current?.value);
+        console.log('Email:', emailRef.current?.value);
+        console.log('Address:', addressRef.current?.value);
+        console.log('Phone:', phoneRef.current?.value);
+        try {
+            const res = await axios.put('http://localhost:3000/api/user', {
+                id: context?.user.id,
+                firstName : firstNameRef.current?.value || context?.user.firstName || '',
+                lastName : lastNameRef.current?.value || context?.user.lastName || '',
+                email : emailRef.current?.value || context?.user.email || '',
+                address : addressRef.current?.value || context?.user.address || '',
+                phone : phoneRef.current?.value || context?.user.phone || ''
+            },{
+                headers: {
+                    "user-id" : context?.user.id
+                }
+            })
 
-        // try {
-            if (context) {
-                context.userDispatch({
-                    type: 'UPDATE', data: {
-                        lastName: lastNameRef.current?.value || '',
-                        email: emailRef.current?.value || '',
-                        address: addressRef.current?.value || '',
-                        phone: phoneRef.current?.value || ''
-                    }
-                })
+            console.log(res)
+            console.log('Response from API:', res.data);
+
+            if(context?.user){
+                setClicked(false)
+                context.userDispatch({type : 'UPDATE', data : res.data})
+                console.log(context?.user)
             }
-        //     const res = await axios.put('http://localhost:3000/api/user', {
-        //         firstName: context?.user.firstName,
-        //         lastName: context?.user.lastName,
-        //         email: context?.user.email,
-        //         address: context?.user.address,
-        //         phone: context?.user.phone
-        //   })
-        //  } catch (e) {
-        //     if (axios.isAxiosError(e) && e.response?.status === 401)
-        //         alert('נתונים לא תקינים!');
-        //       console.log(e);;
-        // }
+         } catch (e) {
+            if (axios.isAxiosError(e) && e.response?.status === 401)
+                alert('נתונים לא תקינים!');
+              console.log(e);;
+        }
 
     }
     return(
@@ -68,6 +78,7 @@ export const Update = () =>{
         <Box sx={style}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
                 <form onSubmit={handleSubmit}>
+                    <TextField fullWidth label="First Name" variant="outlined" inputRef={firstNameRef} />
                     <TextField fullWidth label="Last Name" variant="outlined" inputRef={lastNameRef} />
                     <TextField fullWidth label="Email" variant="outlined" inputRef={emailRef} />
                     <TextField fullWidth label="Address" variant="outlined" inputRef={addressRef} />

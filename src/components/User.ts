@@ -1,4 +1,5 @@
 export type User = {
+    id : number | null,
     firstName : string,
     lastName : string,
     email : string,
@@ -15,27 +16,27 @@ type Action = {
 export const userReducer = (state: User, action: Action) :User=>{
     switch(action.type){
         case 'CREATE':
-            const {firstName, password} = action.data as Partial<User>
+            const {id, firstName, lastName, password, email, address, phone}= action.data as Partial<User>
             return{
+                id : id || null,
                 firstName: firstName || '',
-                lastName: '',
-                email : '',
+                lastName: lastName || '',
+                email : email || '',
                 password : password || '',
-                address : '',
-                phone : ''
+                address : address || '',
+                phone : phone || ''
             }
         case 'UPDATE':
             return {
-                firstName: state.firstName,
-                lastName: action.data.lastName || state.lastName,
+                ...state,
+                id: state.id,
+                firstName: action?.data?.firstName || state.firstName,
+                lastName: action?.data?.lastName || state.lastName,
                 password: state.password,
-                email: action.data.email || state.email,
-                address: action.data.address || state.address,
-                phone: action.data.phone || state.phone
+                email: action?.data?.email || state.email,
+                address: action?.data?.address || state.address,
+                phone: action?.data?.phone || state.phone
             }
-
-        case 'GET':
-            return state
 
         default:
             return state

@@ -1,4 +1,4 @@
-import { createContext, useReducer, useState } from "react";
+import { createContext, useContext, useReducer, useState } from "react";
 import { User, userReducer } from "./User";
 import Login from "./Login";
 import { Grid2 as Grid } from "@mui/material";
@@ -16,6 +16,7 @@ export const UserContext = createContext<UserContextType | null>(null)
 
 const Home = () =>{
   const initialUser: User = {
+    id: null,
     firstName: '',
     lastName: '',
     email: '',
@@ -30,6 +31,8 @@ const Home = () =>{
   const handleLoginSuccess = () => {
     setLoginSuccess(true)
   }
+
+
     return(
         <>
     <Grid container>
@@ -59,9 +62,7 @@ const Home = () =>{
              </Grid>
 
         </Grid> 
-    {user.firstName}
-    {user.lastName}
-    {user.email}
+        <div>Home</div>
       </>
     )
 }

@@ -1,7 +1,7 @@
 import { Grid2 as Grid } from "@mui/material";
 import { Link } from "react-router"
 const NavBar = () => {
-    const name = 'Chaya'
+
     return (<>
         <Grid container>
             <Grid sx={{
@@ -10,9 +10,8 @@ const NavBar = () => {
                 right: 5
             }}>
             <nav>
-                <Link to='/'>Home</Link> |
-                <Link to={`/person/${name}`}>person</Link> 
-                {/* |<Link to={`chaya`}>chaya</Link> */}
+                <Link to='/' style={{ color: '#01b7c1aa', fontSize: '18px' }}>Home</Link> |
+                <Link to={`/about`} style={{ color: '#01b7c1aa', fontSize: '18px' }}>About</Link> 
             </nav>
             </Grid>
         </Grid>

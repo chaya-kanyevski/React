@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { UserContext } from "./Home"
 import { Avatar, Box, Typography } from "@mui/material";
 
@@ -6,13 +6,11 @@ import { Avatar, Box, Typography } from "@mui/material";
 const UserName = () =>{
     const context = useContext(UserContext)
 
-    let name : string = ''
-
-    if (context) {
-        name = context.user?.firstName
-    }
-
-
+    const name = context?.user?.firstName || '';
+    useEffect(() => {
+        console.log("User context updated:", context?.user);
+    }, [context?.user]);
+    
     return(
         <>
         

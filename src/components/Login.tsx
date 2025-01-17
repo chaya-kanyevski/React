@@ -20,7 +20,7 @@ const style = {
 
 const Login = ({ onLoginSuccess }: { onLoginSuccess: Function }) =>{
 
-    const nameRef = useRef<HTMLInputElement>(null)
+    const emailRef = useRef<HTMLInputElement>(null)
     const passwordRef = useRef<HTMLInputElement>(null)
     const [clicked, setClicked] = useState(false)
     const context = useContext(UserContext);
@@ -30,13 +30,24 @@ const Login = ({ onLoginSuccess }: { onLoginSuccess: Function }) =>{
       e.preventDefault();
       try{
         const res = await axios.post('http://localhost:3000/api/user/login', {
-          firstName: nameRef.current?.value,
+          email: emailRef.current?.value,
           password: passwordRef.current?.value
         })
         console.log(res);
+        console.log(res.data);
         setUser(res.data.user)
         onLoginSuccess();
-        context?.userDispatch({ type: 'CREATE', data: { firstName: nameRef.current?.value || '', password: passwordRef.current?.value || '' } })
+
+        context?.userDispatch({ type: 'CREATE', data: { 
+          id: res.data.user.id, 
+          firstName: res.data.user.firstName,
+          lastName: res.data.user.lastName,
+          password: passwordRef.current?.value || '' ,
+          email: emailRef.current?.value || '', 
+          address: res.data.user.address,
+          phone: res.data.user.phone
+
+        } })
         setClicked(false);
       }catch (e) {
         if (axios.isAxiosError(e) && e.response?.status === 401)
@@ -61,8 +72,8 @@ const Login = ({ onLoginSuccess }: { onLoginSuccess: Function }) =>{
             <Typography id="modal-modal-title" variant="h6" component="h2">
 
                     <form onSubmit={handleSubmit}>
-                    <TextField fullWidth id="outlined-basic" label="FirstName" variant="outlined" inputRef={nameRef}/>
-                    <TextField fullWidth id="outlined-basic" label="Password" variant="outlined" inputRef={passwordRef}/>
+                    <TextField type="text" fullWidth id="outlined-basic" label="Email" variant="outlined" inputRef={emailRef}/>
+                    <TextField type="password" fullWidth id="outlined-basic" label="Password" variant="outlined" inputRef={passwordRef}/>
                     <Button type='submit' variant="contained" endIcon={<SendIcon />}
                     sx={{
                         backgroundColor: 'white',

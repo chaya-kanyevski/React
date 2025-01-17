@@ -19,8 +19,8 @@ const style = {
 };
 
 const SignIn = ({ onLoginSuccess }: { onLoginSuccess: Function }) => {
-  const nameRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
+  const emailRef = useRef<HTMLInputElement>(null)
   const [clicked, setClicked] = useState(false)
   const context = useContext(UserContext);
   const [user, setUser] = useState({})
@@ -30,15 +30,16 @@ const SignIn = ({ onLoginSuccess }: { onLoginSuccess: Function }) => {
     
     try {
         const res = await axios.post('http://localhost:3000/api/user/register', {
-        firstName: nameRef.current?.value,
+        email : emailRef.current?.value,
         password: passwordRef.current?.value
       })
 
       console.log(res);
+      console.log('Response:', res.data);
       setUser(res.data.user)
       onLoginSuccess();
       setClicked(false)
-      context?.userDispatch({ type: 'CREATE', data: { firstName: nameRef.current?.value || '', password: passwordRef.current?.value || '' } })
+      context?.userDispatch({ type: 'CREATE', data: { id: res.data.userId, email: emailRef.current?.value || '', password: passwordRef.current?.value || '' } })
     } catch (e) {
         if (axios.isAxiosError(e) && e.response?.status === 401)
             alert('מייל או סיסמא לא תקינים');
@@ -47,7 +48,7 @@ const SignIn = ({ onLoginSuccess }: { onLoginSuccess: Function }) => {
   }
 
   return (<>
-    <Button onClick={() => { setClicked(true) }} variant="outlined" sx={{ backgroundColor: 'white', color: ' #40E0D0 ', border: '1px solid gray' }}>SignIn</Button>
+    <Button onClick={() => { setClicked(true) }} variant="outlined" sx={{ backgroundColor: 'white', color: ' #40E0D0 ', border: '1px solid gray' }}>Register</Button>
     {clicked &&
       <Modal
         open={clicked}
@@ -58,8 +59,8 @@ const SignIn = ({ onLoginSuccess }: { onLoginSuccess: Function }) => {
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             <form onSubmit={handleSubmit}>
-              <TextField type="text" fullWidth label="First Name" variant="outlined" inputRef={nameRef} />
-              <TextField type="text" fullWidth label="Password" variant="outlined" inputRef={passwordRef} />
+              <TextField type="email" fullWidth label="Email" variant="outlined" inputRef={emailRef} />
+              <TextField type="password" fullWidth label="Password" variant="outlined" inputRef={passwordRef} />
               <Button type='submit' variant="contained" endIcon={<SendIcon />} sx={{
                 backgroundColor: 'white',
                 color: ' #40E0D0 ',

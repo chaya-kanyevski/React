@@ -1,6 +1,6 @@
 import Layout from "./components/Layout";
 import NavBar from "./components/NavBar";
-import Person from "./components/Person";
+import About from "./components/About";
 import {createBrowserRouter } from "react-router";
 
 
@@ -11,8 +11,8 @@ export const myRouter = createBrowserRouter([
         errorElement: <>main error</>,
         children: [
             {path: '/', element: <NavBar/>},
-            {path: 'chaya', element: <>my name is: chaya</>},
-            {path: 'person/:name', element: <Person/>}
+            // {path: 'chaya', element: <>my name is: chaya</>},
+            {path: '/about', element: <About/>}
         ]
     }
 ])
