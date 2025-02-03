@@ -1,18 +1,31 @@
-import Layout from "./components/Layout";
-import NavBar from "./components/NavBar";
+import Layout from "./components/layout/Layout";
 import About from "./components/About";
-import {createBrowserRouter } from "react-router";
-
+import Home from "./components/Home";
+import RecipeDetails from "./components/recipes/RecipeDetails";
+import { createBrowserRouter } from "react-router-dom";
+import AddRecipe from "./components/recipes/AddRecipe";
 
 export const myRouter = createBrowserRouter([
     {
         path: '/',
-        element: <Layout/>,
-        errorElement: <>main error</>,
+        element: <Layout />,
         children: [
-            {path: '/', element: <NavBar/>},
-            // {path: 'chaya', element: <>my name is: chaya</>},
-            {path: '/about', element: <About/>}
+            {
+                index: true,
+                element: <Home />
+            },
+            {
+                path: '/recipe-details',
+                element: <RecipeDetails />
+            },
+            {
+                path: '/about',
+                element: <About />
+            },
+            {
+                path: '/add-recipe',
+                element: <AddRecipe />
+            }
         ]
     }
-])
+]);
