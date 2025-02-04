@@ -5,7 +5,7 @@ import RecipeStore, { Recipe } from "../../store/RecipeStore";
 import { recipeSchema } from "./RecipeValidation";
 import { Button, Dialog, DialogContent } from "@mui/material";
 import RecipeFormFields from "./RecipeFormFields";
-import { UserContext } from "../layout/Layout";
+import { UserContext } from "../../App";
 
 const AddRecipe = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);

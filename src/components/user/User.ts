@@ -8,6 +8,21 @@ export type User = {
     phone : string
 }
 
+export type UserContextType = {
+    user: User;
+    userDispatch: React.Dispatch<any>;
+};
+
+export const initialUser: User = {
+    id: null,
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    address: '',
+    phone: ''
+};
+
 type Action = {
     type: 'CREATE' | 'UPDATE' | 'GET' | 'REMOVE',
     data: Partial<User>

@@ -20,16 +20,8 @@ export class RecipeStore {
     }
 
     async getRecipes() {
-        // Check internet connection
-        if (!navigator.onLine) {
-            alert('No internet connection. Please check your network.');
-            return;
-        }
-
         try {
-            const res = await axios.get('http://localhost:3000/api/recipes', {
-                timeout: 5000 // 5 seconds timeout
-            })
+            const res = await axios.get('http://localhost:3000/api/recipes')
             runInAction(() => {
                 this.recipes = res.data.map((recipe: Recipe) => ({
                     ...recipe,
@@ -38,18 +30,14 @@ export class RecipeStore {
             });
         } catch (e: any) {
             runInAction(() => {
-                this.recipes = []; // Clear recipes on error
-            });
-            
+                this.recipes = [];
+            });           
             if (axios.isAxiosError(e)) {
                 if (e.response) {
-                    // The request was made and the server responded with a status code
                     alert(`Server Error: ${e.response.status} - ${e.response.data.message || 'Unknown error'}`);
                 } else if (e.request) {
-                    // The request was made but no response was received
                     alert('No response received from server. Please check your network connection.');
                 } else {
-                    // Something happened in setting up the request
                     alert('Error setting up the request. Please try again.');
                 }
             } else {

@@ -2,8 +2,7 @@ import { Box, Drawer, CssBaseline, Toolbar } from '@mui/material';
 import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
 import RecipesList from "../recipes/RecipesList";
-import { User, userReducer } from '../user/User';
-import { createContext, useReducer, useState } from 'react';
+import {  useState } from 'react';
 import Login from '../user/Login';
 import Sign from '../user/Sign';
 import UserName from '../user/UserName+Avatar';
@@ -11,36 +10,13 @@ import Update from '../user/Update';
 
 const drawerWidth = 340;
 
-export type UserContextType = {
-    user: User;
-    userDispatch: React.Dispatch<any>;
-};
-
-export const UserContext = createContext<UserContextType | null>(null);
-
 const Layout = () => {
-
-    const initialUser: User = {
-        id: null,
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        address: '',
-        phone: ''
-    };
-
-    const [user, userDispatch] = useReducer(userReducer, initialUser)
-
     const [loginSuccess, setLoginSuccess] = useState(false);
     
-    const handleLoginSuccess = () => {
-        setLoginSuccess(true)
-      }
-
-
+    const handleLoginSuccess = () => setLoginSuccess(true)
+        
     return (
-        <UserContext value={{ user, userDispatch }}>
+      <>
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
                 <NavBar />    
@@ -76,7 +52,7 @@ const Layout = () => {
             <Update/>
           </Box>
         )}
-        </UserContext>
+        </>
     )
 }
 export default Layout;
